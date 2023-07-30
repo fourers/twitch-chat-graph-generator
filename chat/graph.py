@@ -1,4 +1,5 @@
 import datetime
+import os
 import time
 from functools import lru_cache
 
@@ -72,6 +73,7 @@ def generate_network_graph(
 
 
 def write_gexf_file(graph: Graph, output_file_path: str) -> None:
+    os.makedirs(output_file_path, exist_ok=True)
     output_file_name = f"{output_file_path.rstrip('/')}/{int(time.time())}.gexf"
     write_gexf(graph, output_file_name)
     print(f"Output to: {output_file_name}")
