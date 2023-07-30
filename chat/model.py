@@ -14,7 +14,6 @@ class ChatEdge:
 
 
 class ChatProximity:
-
     def __init__(self, threshold: float):
         self._nodes: dict[int, int] = {}
         self._data: dict[tuple[int, int], list[float]] = {}
@@ -55,7 +54,6 @@ class ChatProximity:
 
 
 class ChatMessage:
-
     @staticmethod
     def convert_hex_to_colour(hex_code: Optional[str]) -> str:
         if hex_code is None:
@@ -89,7 +87,6 @@ class ChatNode:
 
 
 class ChatNodes:
-
     def __init__(self):
         self._data = {}
 
@@ -104,4 +101,7 @@ class ChatNodes:
 
     @property
     def data(self) -> list[ChatNode]:
-        return [ChatNode(k, v["label"], v["count"], v["colour"]) for k, v in tqdm(self._data.items())]
+        return [
+            ChatNode(k, v["label"], v["count"], v["colour"])
+            for k, v in tqdm(self._data.items())
+        ]

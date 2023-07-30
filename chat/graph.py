@@ -12,20 +12,23 @@ from chat.model import ChatMessage, ChatNode, ChatNodes, ChatEdge, ChatProximity
 def generate_nodes(chat_messages: list[ChatMessage]) -> list[ChatNode]:
     chat_nodes = ChatNodes()
     for message in tqdm(chat_messages):
-        chat_nodes.update_node(message.user_id, message.username, message.user_colour, message.colour)
+        chat_nodes.update_node(
+            message.user_id, message.username, message.user_colour, message.colour
+        )
     return chat_nodes.data
 
 
 class MessageCache:
-
     def __init__(self, chat_messages: list[ChatMessage]):
         self._chat_messages = chat_messages
 
     @lru_cache
     def filter(self, rounded_timestamp: datetime.datetime) -> list[ChatMessage]:
         return [
-            msg for msg in self._chat_messages
-            if abs((msg.timestamp - rounded_timestamp).total_seconds() / 60) < PROXIMITY_MINUTES_THRESHOLD + 1
+            msg
+            for msg in self._chat_messages
+            if abs((msg.timestamp - rounded_timestamp).total_seconds() / 60)
+            < PROXIMITY_MINUTES_THRESHOLD + 1
         ]
 
 
@@ -36,7 +39,9 @@ def generate_edges(chat_messages: list[ChatMessage]) -> list[ChatEdge]:
         for iter_message in message_filter.filter(message.rounded_timestamp):
             if message.username == iter_message.username:
                 continue
-            minutes_difference = abs((message.timestamp - iter_message.timestamp).total_seconds() / 60)
+            minutes_difference = abs(
+                (message.timestamp - iter_message.timestamp).total_seconds() / 60
+            )
             if minutes_difference < PROXIMITY_MINUTES_THRESHOLD:
                 chat_model.add_proximity(
                     message.user_id,
@@ -47,8 +52,8 @@ def generate_edges(chat_messages: list[ChatMessage]) -> list[ChatEdge]:
 
 
 def generate_network_graph(
-        nodes: list[ChatNode],
-        edges: list[ChatEdge],
+    nodes: list[ChatNode],
+    edges: list[ChatEdge],
 ) -> Graph:
     graph = Graph()
     for node in tqdm(nodes):
