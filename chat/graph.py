@@ -16,7 +16,7 @@ def generate_nodes(chat_messages: list[ChatMessage]) -> list[ChatNode]:
     return chat_nodes.data
 
 
-class MessageFilter:
+class MessageCache:
 
     def __init__(self, chat_messages: list[ChatMessage]):
         self._chat_messages = chat_messages
@@ -31,7 +31,7 @@ class MessageFilter:
 
 def generate_edges(chat_messages: list[ChatMessage]) -> list[ChatEdge]:
     chat_model = ChatProximity(PROXIMITY_MINUTES_THRESHOLD)
-    message_filter = MessageFilter(chat_messages)
+    message_filter = MessageCache(chat_messages)
     for message in tqdm(chat_messages):
         for iter_message in message_filter.filter(message.rounded_timestamp):
             if message.username == iter_message.username:

@@ -41,7 +41,7 @@ class ChatProximity:
         self._add_count(user2)
         self._add_proximity(user1, user2, proximity)
 
-    def get_node_totals(self, pair: tuple[int, int]):
+    def get_node_totals(self, pair: tuple[int, int]) -> float:
         user1_total = self._nodes[pair[0]]
         user2_total = self._nodes[pair[1]]
         return min(user1_total, user2_total)
@@ -57,7 +57,7 @@ class ChatProximity:
 class ChatMessage:
 
     @staticmethod
-    def convert_hex_to_colour(hex_code: Optional[str]):
+    def convert_hex_to_colour(hex_code: Optional[str]) -> str:
         if hex_code is None:
             hex_code = "#808080"
         return convert_rgb_to_colour(hex_code)
@@ -72,7 +72,7 @@ class ChatMessage:
         self.rounded_timestamp = self.timestamp.replace(second=0, microsecond=0)
 
     @property
-    def colour(self):
+    def colour(self) -> str:
         return convert_colour_to_name(self.user_colour)
 
 
