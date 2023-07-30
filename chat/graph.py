@@ -52,12 +52,15 @@ def generate_network_graph(
 ) -> Graph:
     graph = Graph()
     for node in tqdm(nodes):
-        graph.add_node(node.user_id, label=node.label, count=node.count, color=node.colour)
+        graph.add_node(node.user_id, label=node.label, count=node.count)
     for edge in tqdm(edges):
         if edge.weight > EDGE_WEIGHT_THRESHOLD:
             graph.add_edge(*edge.pair, weight=edge.weight)
+    print(f"Created graph with {len(graph.nodes)} nodes and {len(graph.edges)} edges")
     return graph
 
 
 def write_gexf_file(graph: Graph, output_file_path: str) -> None:
-    write_gexf(graph, f"{output_file_path.rstrip('/')}/{int(time.time())}.gexf")
+    output_file_name = f"{output_file_path.rstrip('/')}/{int(time.time())}.gexf"
+    write_gexf(graph, output_file_name)
+    print(f"Output to: {output_file_name}")

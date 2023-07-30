@@ -1,6 +1,5 @@
 import datetime
 from dataclasses import dataclass
-from statistics import mean
 from typing import Optional
 
 from tqdm import tqdm
@@ -17,14 +16,14 @@ class ChatEdge:
 class ChatProximity:
 
     def __init__(self, threshold: float):
+        self._nodes: dict[int, int] = {}
         self._data: dict[tuple[int, int], list[float]] = {}
         self._threshold = threshold
 
-    def add_proximity(self, user1: int, user2: int, proximity: float):
-        if user1 == user2:
-            raise KeyError("Same user ids")
-        if proximity > self._threshold:
-            raise ValueError("Invalid proximity")
+    def _add_count(self, user: int):
+        self._nodes[user] = self._nodes.get(user, 0) + 1
+
+    def _add_proximity(self, user1: int, user2: int, proximity: float):
         if user2 < user1:
             user1, user2 = user2, user1
         pair = (user1, user2)
@@ -33,9 +32,26 @@ class ChatProximity:
         else:
             self._data[pair].append(proximity)
 
+    def add_proximity(self, user1: int, user2: int, proximity: float):
+        if user1 == user2:
+            raise KeyError("Same user ids")
+        if proximity > self._threshold:
+            raise ValueError("Invalid proximity")
+        self._add_count(user1)
+        self._add_count(user2)
+        self._add_proximity(user1, user2, proximity)
+
+    def get_node_totals(self, pair: tuple[int, int]):
+        user1_total = self._nodes[pair[0]]
+        user2_total = self._nodes[pair[1]]
+        return min(user1_total, user2_total)
+
     @property
     def data(self) -> list[ChatEdge]:
-        return [ChatEdge(k, mean(v)) for k, v in tqdm(self._data.items())]
+        return [
+            ChatEdge(k, sum(v) / self.get_node_totals(k))
+            for k, v in tqdm(self._data.items())
+        ]
 
 
 class ChatMessage:
