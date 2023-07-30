@@ -2,9 +2,9 @@ from functools import cache
 
 from scipy.spatial import KDTree
 from webcolors import (
-    hex_to_rgb,
     CSS3_HEX_TO_NAMES,
     CSS3_NAMES_TO_HEX,
+    hex_to_rgb,
 )
 
 

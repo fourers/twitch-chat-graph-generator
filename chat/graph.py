@@ -5,8 +5,14 @@ from functools import lru_cache
 from networkx import Graph, write_gexf
 from tqdm import tqdm
 
-from chat.constants import PROXIMITY_MINUTES_THRESHOLD, EDGE_WEIGHT_THRESHOLD
-from chat.model import ChatMessage, ChatNode, ChatNodes, ChatEdge, ChatProximity
+from chat.constants import EDGE_WEIGHT_THRESHOLD, PROXIMITY_MINUTES_THRESHOLD
+from chat.model import (
+    ChatEdge,
+    ChatMessage,
+    ChatNode,
+    ChatNodes,
+    ChatProximity,
+)
 
 
 def generate_nodes(chat_messages: list[ChatMessage]) -> list[ChatNode]:

@@ -1,9 +1,9 @@
 import glob
 
 from chat.graph import (
-    generate_nodes,
     generate_edges,
     generate_network_graph,
+    generate_nodes,
     write_gexf_file,
 )
 from chat.model import convert_to_chat_messages

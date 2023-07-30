@@ -4,7 +4,7 @@ from typing import Optional
 
 from tqdm import tqdm
 
-from chat.colours import convert_rgb_to_colour, convert_colour_to_name
+from chat.colours import convert_colour_to_name, convert_rgb_to_colour
 
 
 @dataclass(frozen=True)
